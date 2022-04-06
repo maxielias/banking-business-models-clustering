@@ -4,11 +4,14 @@
 import pandas as pd
 import numpy as np
 #####################################
-# CARGO EL ARCHIVO (DEBE ESTAR GUARDADO COMO TXT CON "," COMO SEPARADOR, EL DECIMAL ES EL ".", Y SIN COMILLAS COMO SEPARADOR DE TEXTO)
+# CARGO EL ARCHIVO (DEBE ESTAR GUARDADO COMO TXT CON ";" COMO SEPARADOR, EL DECIMAL ES EL ".", Y SIN COMILLAS COMO SEPARADOR DE TEXTO)
 # LOADING CSV FILE, RENAMIGN COLUMNS
-evol_ind = pd.read_csv('data\evol_ind.txt', sep = ",", dtype = {'EENTIDAD': str, 'CODIND': str, 'FECHA': str, 'IND': float})
+evol_ind = pd.read_csv('data\evol_ind.csv', sep = ";", 
+                         dtype = {'EENTIDAD': str, 'CODIND': str, 'FECHA': str, 'IND': str})
 evol_ind = evol_ind.rename(columns={'EENTIDAD':'ent', 'CODIND':'cod', 'FECHA':'fecha', 'IND':'ind'})
-# SACARLE LOS GH Y SISTEMA
+evol_ind['ind'] = [ind.replace(',','.') for ind in evol_ind['ind']]
+print(evol_ind)
+"""# SACARLE LOS GH Y SISTEMA
 # DELETING GROUPS KEEPING INDIVIDUAL BANKS FOR ANALYSIS
 list_gh = ['1', '2', '3', '4', '5', '6', '7', '8', '11111', '00', '10', '11',
 		'44099', '44098', '44096', '44095', '44088', '44093', '44092', '44090', '00340', '44059', '44094'
@@ -19,17 +22,14 @@ evol_ind_loc= evol_ind[~evol_ind['ent'].isin(list_gh)]
 '''evol_ind = pd.read_csv('data/tit_ind.txt', sep = ",", dtype = {'CodInd': str, 'NomInd': str, 'Orden': int,
                                                                 'Tipo': str, 'SForma': str, 'Formula': str,
                                                                 'Alerta': str, 'Interpretación': str})'''
-'''list_ind = ['A16', 'A17', 'A18',
-			'AG1', 'AG2', 'AG28',
-			'C1', 'C10', 'C11', 'C24', 'C25', 'C7',
-			'E1', 'E2', 'E9', 
-			'L10', 'L11', 'L12', 'L8',
-			'M1', 'M2', 'MS1', 'MS7',
-			'R10', 'R11', 'R12', 'R13',
-			'R20', 'R23', 'R28', 'R8', 'R9',
-			'RG1II', 'RG2', 'RG3', 'RG4', 'RG5', 'RG6'
-			]
-evol_ind_loc= evol_ind_loc[evol_ind_loc['cod'].isin(list_ind)]'''
+list_ind = [
+          'R2', 'R1', 'E2', 'E1', 'RAPM',
+          'A6', 'AG1', 'A2', 'A21',
+          'L1', 'L8',
+          'C1', 'C14', 'C2', 
+          'LS1', 'LS2', 'MS1'
+		]
+evol_ind_loc= evol_ind_loc[evol_ind_loc['cod'].isin(list_ind)]
 # PROMEDIO DOCE MESES EN NUEVA COLUMNA
 # 48 ROLLING WINDOW AVERAGE
 evol_ind_loc['avg_ind'] = evol_ind_loc['ind'].rolling(window=48).mean()
@@ -197,4 +197,4 @@ dendrogram(linked,
             labels=evol_ind_piv.index,
             distance_sort='descending',
             show_leaf_counts=True)
-plt.show()
+plt.show()"""
